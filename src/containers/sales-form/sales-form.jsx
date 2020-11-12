@@ -1319,7 +1319,10 @@ const SalesForm = () => {
 
                     let totalPax;
 
-                    if (cart[0].rooms[0].sharing === "Entire Apartment") {
+                    if (
+                      cart[0].rooms[0].sharing === "Entire Apartment" ||
+                      TotalPax === 0
+                    ) {
                       totalPax = noOfPax;
                     } else {
                       totalPax = {
