@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import "./App.css";
 
-import SalesForm from "./containers/sales-form/sales-form";
+import SalesForm from "./containers/sales-form-new/sales-form";
 
 const App = () => (
   <Fragment>

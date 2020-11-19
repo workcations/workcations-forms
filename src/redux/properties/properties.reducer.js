@@ -17,7 +17,7 @@ const INITIAL_STATE = {
   nameOfState: "",
   city: "",
   property: "",
-  propertyData: [],
+  propertyData: null,
   bookingId: null,
   bookingLink: null,
   bookingCreated: false,
