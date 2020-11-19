@@ -233,6 +233,8 @@ const SalesForm = () => {
     }
   }, [dispatch, propertyListData, stateList]);
 
+  const [paymentButton, setPaymentButton] = useState(false);
+
   const [formDetails, setFormDetails] = useState({
     fullName: "",
     phone: "",
@@ -258,15 +260,6 @@ const SalesForm = () => {
     transportation,
     remarks,
   } = formDetails;
-
-  const handleFormChanges = (e) => {
-    if (e.target.name !== "phone" || `${e.target.value}`.length < 11) {
-      setFormDetails({
-        ...formDetails,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
 
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -943,6 +936,45 @@ const SalesForm = () => {
     }
   }, [mealsPrice, totalPax, roomCount]);
 
+  const handleFormChanges = (e) => {
+    if (e.target.name !== "phone" || `${e.target.value}`.length < 11) {
+      setFormDetails({
+        ...formDetails,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (
+      totalPrice > 0 &&
+      fullName.length > 0 &&
+      phone.length === 10 &&
+      totalPax.length > 0 &&
+      advanceAccount.length > 0 &&
+      advanceAmount.length > 0 &&
+      sellingAmount.length > 0 &&
+      salesEmail.length > 0 &&
+      leadSource.length > 0 &&
+      transportation.length > 0
+    ) {
+      setPaymentButton(true);
+    } else {
+      setPaymentButton(false);
+    }
+  }, [
+    totalPrice,
+    fullName,
+    phone,
+    totalPax,
+    advanceAccount,
+    advanceAmount,
+    sellingAmount,
+    salesEmail,
+    leadSource,
+    transportation,
+  ]);
+
   return (
     <PageContainer>
       {isForm ? (
@@ -1480,118 +1512,120 @@ const SalesForm = () => {
             </PaymentDetails>
             <Button
               onClick={() => {
-                const data = {
-                  name: fullName,
-                  phone: phone,
-                  totalPax: {
-                    value: totalPax,
-                    warningMessage: "",
-                  },
-                  salesPerson: salesEmail,
-                  advance: advanceAmount,
-                  account: advanceAccount,
-                  amount: sellingAmount,
-                  leadSource: leadSource,
-                  transportation: transportation,
-                  checkIn: startDate,
-                  checkOut: endDate,
-                  property: {
-                    about: propertyData.description.about.value,
-                    address: propertyData.location.address,
-                    breakfast: propertyData.meals.breakfast.available
-                      ? propertyData.meals.breakfast.value
-                      : -1,
-                    lunch: propertyData.meals.lunchVeg.available
-                      ? propertyData.meals.lunchVeg.value
-                      : -1,
-                    dinner: propertyData.meals.dinnerVeg.available
-                      ? propertyData.meals.dinnerVeg.value
-                      : -1,
-                    email: propertyData.owner.email,
-                    phone: propertyData.owner.contactPerson[0].phone,
-                    slug: propertyData.slug,
-                    title: `Workcations ${propertyData.id} - ${propertyData.shortTitle}`,
-                    titleShort: propertyData.titleShort,
-                    type: propertyTypes[propertyData.type],
-                    nearby: propertyData.features.nearby,
-                    name: propertyData.location.title,
-                    minDuration: propertyData.features.minDuration,
-                    location: {
-                      city: propertyData.location.city,
-                      state: propertyData.location.state,
+                if (paymentButton) {
+                  const data = {
+                    name: fullName,
+                    phone: phone,
+                    totalPax: {
+                      value: totalPax,
+                      warningMessage: "",
                     },
-                    link: propertyData.location.location,
-                    inventory: propertyData.inventory,
-                    inclusions: propertyData.features.inclusions,
-                    exclusions: propertyData.features.exclusions,
-                    images: propertyData.images,
-                    features: propertyData.features.amenities,
-                    essentials: propertyData.features.essentials,
-                  },
-                  breakfast: breakfastBox,
-                  lunch: lunchBox,
-                  dinner: dinnerBox,
-                  cart: roomCount
-                    .map((item, i) => {
-                      return {
-                        image: cartDetails[i].images[0],
-                        type: cartDetails[i].name,
-                        rooms: item.map((subItem, j) => {
-                          return {
-                            count: subItem,
-                            sharing:
-                              mappingTree[
-                                getRoomSharing(
-                                  cartDetails[i].unit,
-                                  cartDetails[i].occupancy + j
-                                )
-                              ],
-                            ultrashort:
-                              j === 0
-                                ? getRoomPrice(i, "ultraShort")
-                                : getExtraBedPrice(i, j - 1, "ultraShort"),
-                            short:
-                              j === 0
-                                ? getRoomPrice(i, "short")
-                                : getExtraBedPrice(i, j - 1, "short"),
-                            normal:
-                              j === 0
-                                ? getRoomPrice(i, "normal")
-                                : getExtraBedPrice(i, j - 1, "normal"),
-                            long:
-                              j === 0
-                                ? getRoomPrice(i, "long")
-                                : getExtraBedPrice(i, j - 1, "long"),
-                            ultralong:
-                              j === 0
-                                ? getRoomPrice(i, "ultraLong")
-                                : getExtraBedPrice(i, j - 1, "ultraLong"),
-                            monthly:
-                              j === 0
-                                ? getRoomPrice(i, "monthly")
-                                : getExtraBedPrice(i, j - 1, "monthly"),
-                          };
-                        }),
-                      };
-                    })
-                    .map((item) => {
-                      return {
-                        ...item,
-                        rooms: item.rooms.filter(
-                          (subItem) => subItem.count !== 0
-                        ),
-                      };
-                    })
-                    .filter((item) => item.rooms.length > 0),
-                  cartDetails: cartDetails,
-                  customer: false,
-                  remarks: remarks,
-                };
-                dispatch(createBookingStart(JSON.stringify(data)));
-                setForm(false);
+                    salesPerson: salesEmail,
+                    advance: advanceAmount,
+                    account: advanceAccount,
+                    amount: sellingAmount,
+                    leadSource: leadSource,
+                    transportation: transportation,
+                    checkIn: startDate,
+                    checkOut: endDate,
+                    property: {
+                      about: propertyData.description.about.value,
+                      address: propertyData.location.address,
+                      breakfast: propertyData.meals.breakfast.available
+                        ? propertyData.meals.breakfast.value
+                        : -1,
+                      lunch: propertyData.meals.lunchVeg.available
+                        ? propertyData.meals.lunchVeg.value
+                        : -1,
+                      dinner: propertyData.meals.dinnerVeg.available
+                        ? propertyData.meals.dinnerVeg.value
+                        : -1,
+                      email: propertyData.owner.email,
+                      phone: propertyData.owner.contactPerson[0].phone,
+                      slug: propertyData.slug,
+                      title: `Workcations ${propertyData.id} - ${propertyData.shortTitle}`,
+                      titleShort: propertyData.titleShort,
+                      type: propertyTypes[propertyData.type],
+                      nearby: propertyData.features.nearby,
+                      name: propertyData.location.title,
+                      minDuration: propertyData.features.minDuration,
+                      location: {
+                        city: propertyData.location.city,
+                        state: propertyData.location.state,
+                      },
+                      link: propertyData.location.location,
+                      inventory: propertyData.inventory,
+                      inclusions: propertyData.features.inclusions,
+                      exclusions: propertyData.features.exclusions,
+                      images: propertyData.images,
+                      features: propertyData.features.amenities,
+                      essentials: propertyData.features.essentials,
+                    },
+                    breakfast: breakfastBox,
+                    lunch: lunchBox,
+                    dinner: dinnerBox,
+                    cart: roomCount
+                      .map((item, i) => {
+                        return {
+                          image: cartDetails[i].images[0],
+                          type: cartDetails[i].name,
+                          rooms: item.map((subItem, j) => {
+                            return {
+                              count: subItem,
+                              sharing:
+                                mappingTree[
+                                  getRoomSharing(
+                                    cartDetails[i].unit,
+                                    cartDetails[i].occupancy + j
+                                  )
+                                ],
+                              ultrashort:
+                                j === 0
+                                  ? getRoomPrice(i, "ultraShort")
+                                  : getExtraBedPrice(i, j - 1, "ultraShort"),
+                              short:
+                                j === 0
+                                  ? getRoomPrice(i, "short")
+                                  : getExtraBedPrice(i, j - 1, "short"),
+                              normal:
+                                j === 0
+                                  ? getRoomPrice(i, "normal")
+                                  : getExtraBedPrice(i, j - 1, "normal"),
+                              long:
+                                j === 0
+                                  ? getRoomPrice(i, "long")
+                                  : getExtraBedPrice(i, j - 1, "long"),
+                              ultralong:
+                                j === 0
+                                  ? getRoomPrice(i, "ultraLong")
+                                  : getExtraBedPrice(i, j - 1, "ultraLong"),
+                              monthly:
+                                j === 0
+                                  ? getRoomPrice(i, "monthly")
+                                  : getExtraBedPrice(i, j - 1, "monthly"),
+                            };
+                          }),
+                        };
+                      })
+                      .map((item) => {
+                        return {
+                          ...item,
+                          rooms: item.rooms.filter(
+                            (subItem) => subItem.count !== 0
+                          ),
+                        };
+                      })
+                      .filter((item) => item.rooms.length > 0),
+                    cartDetails: cartDetails,
+                    customer: false,
+                    remarks: remarks,
+                  };
+                  dispatch(createBookingStart(JSON.stringify(data)));
+                  setForm(false);
+                }
               }}
               value="Generate Booking"
-              isActive={true}
+              isActive={paymentButton}
             />
           </SectionContainer>
         </Fragment>
