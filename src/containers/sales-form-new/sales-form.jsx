@@ -393,7 +393,7 @@ const SalesForm = () => {
           convertDate(
             `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
           ),
-          "2021-03-31"
+          "2021-12-31"
         )
           .map((item) => {
             return {

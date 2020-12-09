@@ -27,7 +27,7 @@ import {
 } from "../../redux/properties/properties.selectors";
 
 import "./selectsearch.css";
-import "react-datepicker/dist/react-datepicker.css";
+import "../sales-form-new/node_modules/react-datepicker/dist/react-datepicker.css";
 
 import FormInput from "../../components/form-input-text/form-input-text";
 import FormInputTextArea from "../../components/form-input-text-area/form-input-text-area";
@@ -1394,6 +1394,7 @@ const SalesForm = () => {
 };
 
 export default SalesForm;
+
 
 /*
 
