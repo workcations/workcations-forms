@@ -157,7 +157,7 @@ export const getBookingId = async (data) => {
   };
 
   return await fetch(
-    "https://data.workcations.in/createBooking",
+    "https://workcationsbackend.herokuapp.com/booking",
     requestOptions
   )
     .then((response) => response.text())

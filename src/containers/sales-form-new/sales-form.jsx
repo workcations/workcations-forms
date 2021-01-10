@@ -1620,7 +1620,14 @@ const SalesForm = () => {
                     customer: false,
                     remarks: remarks,
                   };
-                  dispatch(createBookingStart(JSON.stringify(data)));
+                  const dataFinal = {
+                    approval: {
+                      status: true,
+                      approvedBy: 3485742,
+                    },
+                    data: data,
+                  };
+                  dispatch(createBookingStart(JSON.stringify(dataFinal)));
                   setForm(false);
                 }
               }}
