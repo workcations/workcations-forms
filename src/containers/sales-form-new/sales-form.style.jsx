@@ -453,3 +453,23 @@ export const MealsCost = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const SelectAccount = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+
+  span {
+    width: 200px;
+    margin-right: 25px;
+    font-weight: 600;
+    color: #ffffff;
+    height: 40px;
+    line-height: 40px;
+
+    @media only screen and (max-width: 900px) {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+`;

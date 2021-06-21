@@ -74,6 +74,7 @@ import {
   Title,
   MealsGrid,
   MealsItem,
+  SelectAccount,
 } from "./sales-form.style";
 
 const DateInput = ({ value, onClick }) => (
@@ -400,9 +401,9 @@ const SalesForm = () => {
               date: item,
               pricing: pricingArray.map((pricingItem) => {
                 for (let i = 1; i < pricingItem.length; i++) {
-                  const pricingItemDates = pricingItem[
-                    i
-                  ].dates.map((dateItem) => convertDate(dateItem));
+                  const pricingItemDates = pricingItem[i].dates.map(
+                    (dateItem) => convertDate(dateItem)
+                  );
                   if (pricingItemDates.indexOf(item) !== -1) {
                     return {
                       available: pricingItem[i].available,
@@ -975,6 +976,34 @@ const SalesForm = () => {
     transportation,
   ]);
 
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const accountsList = [
+    "Razorpay(Website Booking)",
+    "Razorpay(Offline Booking)",
+    "Govind PayTM",
+    "WanderOn HDFC Delhi(9221)",
+    "WanderOn HDFC Bangalore(9261)",
+  ].map((item) => {
+    return {
+      value: item.toLowerCase(),
+      name: item,
+    };
+  });
+
+  useEffect(() => {
+    if (!!selectedAccount) {
+      setFormDetails({
+        ...formDetails,
+        advanceAccount: selectedAccount,
+      });
+    } else {
+      setFormDetails({
+        ...formDetails,
+        advanceAccount: "",
+      });
+    }
+  }, [selectedAccount]);
+
   return (
     <PageContainer>
       {isForm ? (
@@ -1315,15 +1344,15 @@ const SalesForm = () => {
                     warningMessage=""
                     handleChange={handleFormChanges}
                   />
-                  <FormInput
-                    name="advanceAccount"
-                    type="text"
-                    value={advanceAccount}
-                    required
-                    label="Account"
-                    warningMessage=""
-                    handleChange={handleFormChanges}
-                  />
+                  <SelectAccount>
+                    <span>Select Account*</span>
+                    <SelectSearch
+                      options={accountsList}
+                      search
+                      placeholder="Select Account"
+                      onChange={setSelectedAccount}
+                    />
+                  </SelectAccount>
                   <FormInput
                     name="salesEmail"
                     type="email"
