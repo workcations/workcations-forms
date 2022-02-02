@@ -376,8 +376,27 @@ const SalesForm = () => {
                   ? getDatesBetween(pricingItem.from, pricingItem.to)
                   : [],
               available: pricingItem.available,
-              roomOnly: pricingItem.roomOnly,
-              extraBed: pricingItem.extraBed,
+              roomOnly: {
+                ultraShort:
+                  Math.ceil((pricingItem.roomOnly.ultraShort * 1.15) / 50) * 50,
+                short: Math.ceil((pricingItem.roomOnly.short * 1.15) / 50) * 50,
+                normal:
+                  Math.ceil((pricingItem.roomOnly.normal * 1.15) / 50) * 50,
+                long: Math.ceil((pricingItem.roomOnly.long * 1.15) / 50) * 50,
+                ultraLong:
+                  Math.ceil((pricingItem.roomOnly.ultraLong * 1.15) / 50) * 50,
+                monthly:
+                  Math.ceil((pricingItem.roomOnly.monthly * 1.15) / 50) * 50,
+              },
+              extraBed: pricingItem.extraBed.map((extraBedItem) => ({
+                ultraShort:
+                  Math.ceil((extraBedItem.ultraShort * 1.15) / 50) * 50,
+                short: Math.ceil((extraBedItem.short * 1.15) / 50) * 50,
+                normal: Math.ceil((extraBedItem.normal * 1.15) / 50) * 50,
+                long: Math.ceil((extraBedItem.long * 1.15) / 50) * 50,
+                ultraLong: Math.ceil((extraBedItem.ultraLong * 1.15) / 50) * 50,
+                monthly: Math.ceil((extraBedItem.monthly * 1.15) / 50) * 50,
+              })),
             };
           })
         )
@@ -387,6 +406,8 @@ const SalesForm = () => {
 
   const [allDatesData, setAllDatesData] = useState([]);
 
+  console.log(pricingArray);
+
   useEffect(() => {
     if (!!propertyData && !!propertyData.id && pricingArray.length > 0) {
       setAllDatesData(
@@ -394,7 +415,7 @@ const SalesForm = () => {
           convertDate(
             `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
           ),
-          "2021-12-31"
+          "2022-12-31"
         )
           .map((item) => {
             return {
